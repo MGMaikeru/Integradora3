@@ -11,4 +11,8 @@ public class Archive{
 		this.duration = duration;
 	}
 
+	public String getName(){
+		return this.name;
+	}
+
 }

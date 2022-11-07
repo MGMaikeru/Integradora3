@@ -4,6 +4,7 @@ import java.util.Scanner;
 import model.NeoTubeController;
 import model.PodScastCategory;
 import model.SongGenre;
+import model.PlayListType;
 
 
 public class Main{
@@ -57,8 +58,8 @@ public class Main{
 			"1. Register consumer user \n" +
 			"2. Register producer user \n" + 
 			"3. Register audio \n" +
-			"4. Register tenant \n" +
-			"5. Consult free apartments \n" +
+			"4. Create playlist \n" +
+			"5. Configure playlist \n" +
 			//"6. Consult total monthly value of the rented apartments of a building\n" +
 			//"7. Consult status of a specific apartment \n" +
 			//"8. Mostrar quantity of leased apartments of a specific owner \n" +
@@ -66,99 +67,10 @@ public class Main{
 			"0. Exit.\n"; 
 	}
 
-	/*public void consumerUserRegister(){
-		System.out.println("Type building name:");
-		String nameId = getBuildingName();
-		System.out.println("Type building adress:");
-		String adress = reader.next();
-		System.out.println("Type building number of aparments:");
-		int aparmentsNumber = getIntegerData();
-		String msj = controller.addBuilding(nameId, adress, aparmentsNumber);
-		System.out.println(msj);
-	}
-
-	public String getBuildingName(){
-		String msj = "This name is already use. Type another.";
-		String nameId = "";
-		int pos = 0;
-		while(pos != -1){
-			nameId = reader.next();
-			pos = controller.searchBuildingByName(nameId);
-			if (pos != -1){
-				System.out.println(msj);
-			}
-		}
-		return nameId;
-	}
-
-	public void registerAparmentToBuilding(){
-		String msj = "The building is not exist.";
-		System.out.println("Type building name to add aparment:");
-		String buildingName = reader.next();
-		int buildingPos = controller.searchBuildingByName(buildingName);
-		if (buildingPos != -1){
-			msj = "The owner number id is not registered.";
-			System.out.println("Type owner id number of the aparment:");
-			String ownerNumberId = reader.next();
-			int ownerPos = controller.searchOwnerByNumberId(ownerNumberId);
-			if (ownerPos != -1){
-				System.out.println("Type apartment number id:");
-				String numberId = getAparmentNumerId(buildingPos);
-				System.out.println("Type apartment number of rooms:");
-				int quantRooms = getIntegerData();
-				System.out.println("Type apartment number of bathrooms:");
-				int quantBaths = getIntegerData();
-				System.out.println("Will The apartment have a balcony? S/N:");
-				boolean balcony = getBalcony();
-				System.out.println("Type apartment monthly value:");
-				double monthlyValue = reader.nextDouble();
-				msj = controller.addApartment(numberId, quantRooms, quantBaths, balcony, monthlyValue, buildingPos, ownerPos);
-			}
-		}
-
-		System.out.println(msj);
-	}
-
-	public String getAparmentNumerId(int buildingPos){
-		String msj = "This number id is already use. Type another.";
-		String numberId = "";
-		int pos = 0;
-		while(pos != -1){
-			numberId = reader.next();
-			pos = controller.getBuildings()[buildingPos].searchAparmentsById(numberId);
-			if (pos != -1){
-				System.out.println(msj);
-			}
-		}
-		return numberId;
-	}
-
-	public boolean getBalcony(){
-		String option = "";
-		boolean statusBalcony = false;
-		while(!option.equals("S") && !option.equals("N")){
-			option = reader.next();
-			switch(option){
-				case "S":
-					statusBalcony = true;
-					break;
-
-				case "N":
-					statusBalcony = false;
-					break;
-
-				default:
-					System.out.println("Invalid Option!");
-					break;
-			}
-		}
-		return statusBalcony;
-	}*/
-
 	public void consumerUserRegister(){
 		String msj = "The number id is already on use.";
 		System.out.println("Select a type consumer user: 1)ESTANDAR USER, 2)PREMIUM USER");
-		int option = reader.nextInt();
+		int option = getIntegerData();
 		System.out.println("Type identification number:");
 		String numberId = reader.next();
 		int pos = controller.searchUserById(numberId);
@@ -173,7 +85,7 @@ public class Main{
 	public void producerUserRegister(){
 		String msj = "The number id is already on use.";
 		System.out.println("Select a type consumer user: 1)ARTIST, 2)CONTENT CREATOR");
-		int option = reader.nextInt();
+		int option = getIntegerData();
 		System.out.println("Type identification number:");
 		String numberId = reader.next();
 		int pos = controller.searchUserById(numberId);
@@ -292,92 +204,81 @@ public class Main{
 		}
 		return songGenre;
 	}
-/*
-	public void tenantRegister(){
-		String msj = "The building is not exist.";
-		System.out.println("Type building name where the apartment is located:");
-		String buildingName = reader.next();
-		int buildingPos = controller.searchBuildingByName(buildingName);
 
-		if (buildingPos != -1){
-			msj = "The apartment is not exist.";
-			System.out.println("Type apartment number id to lease:");
-			String apartmentId = reader.next();
-			int apartmentPos = controller.getBuildings()[buildingPos].searchAparmentsById(apartmentId);
-
-			if (apartmentPos != -1){
-				System.out.println("Type identification type:");
-				String typeId = reader.next();
-				System.out.println("Type identification number:");
-				String numberId = reader.next();
-				System.out.println("Type tenant name:");
-				String name = reader.next();
-				System.out.println("Type tenant telephone number:");
-				String telephoneNumber = reader.next();
-				System.out.println("Select a type telephone option: 1)HOME, 2)OFFICE, 3)MOVIL, 4)FAMILY, 5)OTHER");
-				TelephoneType telephoneType = getTelephoneType();
-				msj = controller.addTenantToBuilding(typeId, numberId, name, telephoneNumber, telephoneType, buildingPos, apartmentPos);
-			}			
+	public void playListRegister(){
+		String msj = "The number id isn't regitered.";
+		System.out.println("Type identification number of the consumer user:");
+		String numberId = reader.next();
+		int pos = controller.searchUserById(numberId);
+		if (pos != -1){
+			String name = null;
+			PlayListType playListType = PlayListType.AUDIO;
+			int status = controller.verifyInstance(pos);
+			if (status == 0){
+				System.out.println("Type playlist name:");
+				name = reader.next();
+				System.out.println("Select the playlist type: 1)AUDIO,  2)PODSCAST,  3)MIXED");
+				playListType = getPlayListType();
+			}
+			
+			msj = controller.createPlayList(name, playListType, pos, status);
 		}
 		System.out.println(msj);
 	}
 
-	public void consultFreeApartments(){
-		String msj = "The building is not exist.";
-		System.out.println("Type building name where the apartment is located:");
-		String buildingName = reader.next();
-		int buildingPos = controller.searchBuildingByName(buildingName);
-		if (buildingPos != -1){
-			msj = controller.getFreeApartmentsInformation(buildingPos);
+	public PlayListType getPlayListType(){
+		int option = 0;
+		PlayListType playListType = PlayListType.AUDIO;
+		while(option != 1 && option != 2 && option != 3){
+			option = getIntegerData();
+			switch(option){
+				case 1:
+					playListType = PlayListType.AUDIO;
+					break;
+
+				case 2:
+					playListType = PlayListType.PODSCAST;
+					break;
+
+				case 3:
+					playListType = PlayListType.MIXED;
+					break;
+
+				default:
+					System.out.println("Invalid Option!");
+					break;
+			}
+		}
+		return playListType;
+	}
+
+	public void configurePlayList(){
+		String msj = "The number id isn't regitered.";
+		System.out.println("Type identification number of the consumer user:");
+		String numberId = reader.next();
+		int userPos = controller.searchUserById(numberId);
+		if (userPos != -1){
+			msj = "This user isn't a consumer.";
+			int status = controller.verifyInstance(userPos);
+			if (status == 0){
+				msj = "The playlist doesn't be of this user or doesn't exsit.";
+				System.out.println("Type playlist name:");
+				String playListName = reader.next();
+				int playListPos = controller.getPlayListPos(playListName, userPos);
+				if (playListPos != -1){
+					System.out.println("Type the audio name:");
+					String audioName = reader.next();
+					int audioPos = controller.searchArchiveByName(audioName);
+					if (audioPos != -1){
+						System.out.println("Select option: 1)Add audio,  2)Eliminate audio");
+						int option = getIntegerData();
+						msj = controller.executePlayListOption(option, userPos, playListPos, audioPos, audioName);
+					}
+				}
+			}
 		}
 		System.out.println(msj);
 	}
-
-	public void consultTotalMonthlyValue(){
-		String msj = "The building is not exist.";
-		System.out.println("Type building name where the apartment is located:");
-		String buildingName = reader.next();
-		int buildingPos = controller.searchBuildingByName(buildingName);
-		if (buildingPos != -1){
-			msj = controller.getTotalApartmentsValue(buildingPos);
-		}
-		System.out.println(msj);
-	}
-
-	public void consultEspecificApartment(){
-		String msj = "The building is not exist.";
-		System.out.println("Type building name where the apartment is located:");
-		String buildingName = reader.next();
-		int buildingPos = controller.searchBuildingByName(buildingName);
-		if (buildingPos != -1){
-			System.out.println("Type apartment number id:");
-			String numberId = reader.next();
-			msj = controller.consultApartmentStatus(buildingPos, numberId);
-		}
-		System.out.println(msj);
-	}
-
-	public void showOwnerLeasedApartments(){
-		String msj = "The owner number id is not registered.";
-		System.out.println("Type owner id number to consult information:");
-		String ownerNumberId = reader.next();
-		int ownerPos = controller.searchOwnerByNumberId(ownerNumberId);
-		if (ownerPos != -1){
-			msj = controller.getOwnerLeasedApartments(ownerPos);
-		}
-		System.out.println(msj);
-	}
-
-	public void consultOwnerMonthlyValue(){
-		String msj = "The owner number id is not registered.";
-		System.out.println("Type owner id number to consult information:");
-		String ownerNumberId = reader.next();
-		int ownerPos = controller.searchOwnerByNumberId(ownerNumberId);
-		if (ownerPos != -1){
-			msj = controller.calculateDistribution(ownerPos);
-		}
-		System.out.println(msj);
-	}*/
 
 	public int getIntegerData(){
 		String msj = "Invalid character. Type another.";
@@ -408,11 +309,11 @@ public class Main{
 					break;
 
 				case 4: 
-					
+					playListRegister();
 					break;
 
 				case 5: 
-					
+					configurePlayList();
 					break;
 
 				case 6: 
@@ -455,7 +356,4 @@ public class Main{
 
 		return option; 
 	}
-
-
-
 }
