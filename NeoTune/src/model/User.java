@@ -25,5 +25,9 @@ public abstract class User{
 		return this.nickName;
 	}
 
+	public String toString(){
+		return "Name: " + this.nickName + "  Id: " + this.id;
+	}
+
 	//public abstract String addAudio();
 }

@@ -25,6 +25,11 @@ public class PlayList{
 		return this.name;
 	}
 
+	public String getId(){
+		return this.id;
+	}
+
+
 	public String getRandomMatrix(){
 		Random r = new Random();
 		String msj = "";
@@ -46,6 +51,18 @@ public class PlayList{
             for(int j = 0; j < COLUMNS; j++){
                 msj += idMatrix[i][j] + " ";
             }
+        }
+        return msj; 
+    }
+
+    public String printAudios(){
+        String msj = "<<< AUDIOS >>>\n"; 
+
+        for(int i = 0; i < audios.size(); i++){
+            if (audios.get(i) != null){
+            	msj += audios.get(i).toString()+ "\n"; 
+            }
+            
         }
         return msj; 
     }
@@ -94,7 +111,8 @@ public class PlayList{
 		}else if(playListType == PlayListType.MIXED){
 			for (int i = ROWS-1; i>-1; i--) {
 				for (int j = COLUMNS-1; j>-1; j--) {
-					if (((i+j)%2)!=0 && ((i+j)%2)>1){
+					if ((((i+j)%2)!=0) && (((i+j)%2)>1))
+					{
 				 		id += this.idMatrix[i][j];
 					}
 				}
@@ -105,7 +123,18 @@ public class PlayList{
 	}
 
 	public void addAudio(Archive newAudio){
-		audios.add(newAudio);
+		String msj = "";
+		if (this.playListType == PlayListType.AUDIO) {
+			if (newAudio instanceof Song) {
+				audios.add(audioPos);
+			}
+		}else if (this.playListType == PlayListType.PODSCAST) {
+			if (newAudio instanceof Podscast) {
+				audios.add(audioPos);
+			}
+		}else if (this.playListType == PlayListType.MIXED){
+			audios.add(audioPos);
+		}
 	}
 
 	public void eliminateAudio(int audioPos){
@@ -116,6 +145,7 @@ public class PlayList{
 		return "" + printMatrix() + " \n" +
 		 "--------------------\n"+
 		 "Playlist Id: " + this.id + "\n"+
-		 "Playlist name: " + this.name;
+		 "Playlist name: " + this.name + "\n"+
+		 "--------------------";
 	}
 }

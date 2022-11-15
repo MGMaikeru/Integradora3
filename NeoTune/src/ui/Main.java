@@ -60,7 +60,7 @@ public class Main{
 			"3. Register audio \n" +
 			"4. Create playlist \n" +
 			"5. Configure playlist \n" +
-			//"6. Consult total monthly value of the rented apartments of a building\n" +
+			"6. Share playList\n" +
 			//"7. Consult status of a specific apartment \n" +
 			//"8. Mostrar quantity of leased apartments of a specific owner \n" +
 			//"9. Calculate and show monthly value of owner apartments \n" +
@@ -68,34 +68,42 @@ public class Main{
 	}
 
 	public void consumerUserRegister(){
-		String msj = "The number id is already on use.";
+		String msj = "Invalid Option.";
 		System.out.println("Select a type consumer user: 1)ESTANDAR USER, 2)PREMIUM USER");
 		int option = getIntegerData();
-		System.out.println("Type identification number:");
-		String numberId = reader.next();
-		int pos = controller.searchUserById(numberId);
-		if (pos == -1){
-			System.out.println("Type user nickname:");
-			String nickName = reader.next();
-			msj = controller.addConsumerUser(option, nickName, numberId);
+		if (option == 1 || option == 2){
+			msj = "The number id is already on use.";
+			System.out.println("Type identification number:");
+			String numberId = reader.next();
+			int pos = controller.searchUserById(numberId);
+			if (pos == -1){
+				System.out.println("Type user nickname:");
+				String nickName = reader.next();
+				msj = controller.addConsumerUser(option, nickName, numberId);
+			}
 		}
+		
 		System.out.println(msj);
 	}
 
 	public void producerUserRegister(){
-		String msj = "The number id is already on use.";
+		String msj = "Invalid Option.";
 		System.out.println("Select a type consumer user: 1)ARTIST, 2)CONTENT CREATOR");
 		int option = getIntegerData();
-		System.out.println("Type identification number:");
-		String numberId = reader.next();
-		int pos = controller.searchUserById(numberId);
-		if (pos == -1){
-			System.out.println("Type user nickname:");
-			String nickName = reader.next();
-			System.out.println("Type A URL with the user image:");
-			String imageUrl = reader.next();
-			msj = controller.addProducerUser(option, nickName, numberId, imageUrl);
+		if (option == 1 || option == 2){
+			msj = "The number id is already on use.";
+			System.out.println("Type identification number:");
+			String numberId = reader.next();
+			int pos = controller.searchUserById(numberId);
+			if (pos == -1){
+				System.out.println("Type user nickname:");
+				String nickName = reader.next();
+				System.out.println("Type A URL with the user image:");
+				String imageUrl = reader.next();
+				msj = controller.addProducerUser(option, nickName, numberId, imageUrl);
+			}
 		}
+		
 		System.out.println(msj);
 	}
 
@@ -109,6 +117,7 @@ public class Main{
 		String imageUrl = "";
 		double duration = 0;
 		String msj = "The number id isn't regitered.";
+		System.out.println(controller.printProducerUsers());
 		System.out.println("Type identification number of the producer user:");
 		String numberId = reader.next();
 		int pos = controller.searchUserById(numberId);
@@ -207,6 +216,7 @@ public class Main{
 
 	public void playListRegister(){
 		String msj = "The number id isn't regitered.";
+		System.out.println(controller.printConsumerUsers());
 		System.out.println("Type identification number of the consumer user:");
 		String numberId = reader.next();
 		int pos = controller.searchUserById(numberId);
@@ -254,6 +264,7 @@ public class Main{
 
 	public void configurePlayList(){
 		String msj = "The number id isn't regitered.";
+		System.out.println(controller.printConsumerUsers());
 		System.out.println("Type identification number of the consumer user:");
 		String numberId = reader.next();
 		int userPos = controller.searchUserById(numberId);
@@ -266,6 +277,8 @@ public class Main{
 				String playListName = reader.next();
 				int playListPos = controller.getPlayListPos(playListName, userPos);
 				if (playListPos != -1){
+					msj = "The audio isn't exist.";
+					System.out.println(controller.getPlayListAudios(playListPos, userPos)); 
 					System.out.println("Type the audio name:");
 					String audioName = reader.next();
 					int audioPos = controller.searchArchiveByName(audioName);
@@ -277,6 +290,14 @@ public class Main{
 				}
 			}
 		}
+		System.out.println(msj);
+	}
+
+	public void sharePlayList(){
+		String msj = "Play list isn't exist.";
+		System.out.println("Type playlist id:");
+		String playListId = reader.next();
+		msj = controller.searchPlayList(playListId);
 		System.out.println(msj);
 	}
 
@@ -317,7 +338,7 @@ public class Main{
 					break;
 
 				case 6: 
-					
+					sharePlayList();
 					break;
 
 				case 7: 

@@ -13,4 +13,9 @@ public class Song extends Archive{
 		this.genre = genre;
 		this.price = price;
 	}
+
+	@Override
+	public String toString(){
+		return name + " Genre: " + this.genre + " Album: " + this.album + " Duration: " + duration;
+	}
 }

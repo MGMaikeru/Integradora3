@@ -4,10 +4,12 @@ import java.util.ArrayList;
 public class NeoTubeController{
 	private ArrayList<User> users;
 	private ArrayList<Archive> archives;
+	private ArrayList<PlayList> playLists;
 
 	public NeoTubeController(){
 		users = new ArrayList<User>(20);
 		archives = new ArrayList<Archive>(100);
+		playLists = new ArrayList<PlayList>(100);
 	}
 
 	public Archive getArchive(int archivePos){
@@ -17,9 +19,12 @@ public class NeoTubeController{
 	public int searchUserById(String id){
 		int pos = -1;
 		for(int i = 0; i<users.size(); i++){
-			if((users.get(i).getId()).equals(id)){
-				pos = i;
+			if (users.get(i).getId() != null){
+				if((users.get(i).getId()).equals(id)){
+					pos = i;
+				}
 			}
+			
 		}
 		return pos;
 	}
@@ -170,6 +175,49 @@ public class NeoTubeController{
 	public String eliminateAudioToPlayList(String audioName, int playListPos, int userPos){
 		(( ConsumerUser ) ( users.get(userPos) )).eliminateAudioToPlayList(playListPos, audioName);
 		String msj = "Audio eliminated to the playlist of the user" + users.get(userPos).getName() + " .";
+		return msj;
+	}
+
+	public String getPlayListAudios( int playListPos, int userPos){
+		String msj = (( ConsumerUser ) ( users.get(userPos) )).getPlayListSongs(playListPos);
+	
+		return msj;
+	}
+
+	public String printConsumerUsers(){
+		String msj = "<<< Consumer Users>>>\n";
+		for(int i = 0; i<users.size(); i++){
+			if(users.get(i) instanceof ConsumerUser){
+				msj += users.get(i).toString();
+			}
+		}
+		return msj;
+	}
+
+	public String printProducerUsers(){
+		String msj = "<<< Producer Users>>>\n";
+		for(int i = 0; i<users.size(); i++){
+			if(users.get(i) instanceof ProducerUser){
+				msj += users.get(i).toString();
+			}
+		}
+		return msj;
+	}
+
+	public String searchPlayList(String idPlayList){
+		String msj = "Playlist not registered.";
+		String result = "";
+		int playListPos = 0;
+		for (int i = 0; i<users.size(); i++){
+			if (users.get(i) instanceof ConsumerUser && users.get(i) != null){
+				
+				result = (( ConsumerUser ) ( users.get(i) )) .searchPlayList(idPlayList);				
+				if (!result.equals("N")){
+					msj = result;
+				}				
+				
+			}
+		}
 		return msj;
 	}
 	//Tamaño de la matriz divido en dos menos 1.

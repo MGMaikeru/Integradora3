@@ -10,4 +10,9 @@ public class PodScast extends Archive{
 		this.description = description;
 		this.category = category;
 	}
+
+	@Override
+	public String toString(){
+		return this.name + " Category: " + this.category + " Description: " + this.description + " Duration: " + this.duration;
+	}
 }

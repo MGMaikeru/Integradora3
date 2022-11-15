@@ -12,8 +12,35 @@ public class PremiumUser extends ConsumerUser{
 	}
 
 	@Override
+	public ArrayList<PlayList> getPlayLists(){
+		return playLists;
+	}
+
+	@Override
+	public String searchPlayList(String playListId){
+		String msj = "N";
+		boolean isFound = false;
+		for (int i = 0; i < playLists.size() && !isFound; i++){
+			if (playLists.get(i).getId().equals(playListId)){
+				
+				msj = playLists.get(i).toString() + "\n"+
+					 playLists.get(i).printAudios();
+
+				isFound = true;
+			}
+		}
+		return msj;
+	}
+
+	@Override
 	public void addAudioToPlayList(int playListPos, Archive audio){
 		playLists.get(playListPos).addAudio(audio);
+	}
+
+	@Override
+	public String getPlayListSongs(int playListPos){
+		String msj = playLists.get(playListPos).printAudios();
+		return msj;
 	}
 
 	@Override

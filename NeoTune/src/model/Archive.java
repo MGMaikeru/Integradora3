@@ -1,9 +1,9 @@
 package model;
 
-public class Archive{
-	private String name;
+public abstract class Archive{
+	protected String name;
 	private String imageUrl;
-	private double duration; 
+	protected double duration; 
 	
 	public Archive(String name, String imageUrl, double duration){
 		this.name = name;
@@ -14,5 +14,7 @@ public class Archive{
 	public String getName(){
 		return this.name;
 	}
+
+	public abstract String toString();
 
 }
