@@ -1,14 +1,23 @@
 package model;
 import java.util.ArrayList;
 
-public class PremiumUser extends ConsumerUser{
+public class PremiumUser extends ConsumerUser implements IPlayPremium{
 	private ArrayList<PlayList> playLists;
-	private ArrayList<Song> songs;
+	private ArrayList<Archive> songs;
+	private int reproductions;
 
 	public PremiumUser(String nickName, String id){
 		super(nickName, id);
 		playLists = new ArrayList<PlayList>();
-		songs = new ArrayList<Song>();
+		songs = new ArrayList<Archive>();
+	}
+
+	@Override
+	public String addSong(Archive newSong){
+		String msj = "New song bought and added.";
+		songs.add(newSong);
+
+		return msj;
 	}
 
 	@Override
@@ -33,8 +42,9 @@ public class PremiumUser extends ConsumerUser{
 	}
 
 	@Override
-	public void addAudioToPlayList(int playListPos, Archive audio){
-		playLists.get(playListPos).addAudio(audio);
+	public String addAudioToPlayList(int playListPos, Archive audio){
+		String status = playLists.get(playListPos).addAudio(audio);
+		return status;
 	}
 
 	@Override
@@ -64,6 +74,37 @@ public class PremiumUser extends ConsumerUser{
 			}
 		}
 		return pos;
+	}
+
+	@Override
+	public String playSong(){
+		this.reproductions += 1;
+		String reproduction = "";
+
+		reproduction = "Reproducing Song...";
+		System.out.println(reproduction);
+		try {
+   			Thread.sleep(5*1000);
+		}
+		catch (Exception e) {
+   			System.out.println(e);
+		}
+		return reproduction;
+	}
+
+	@Override
+	public String playPodcast(){
+		String reproduction = "";
+
+		reproduction = "Reproducing podcast...";
+		System.out.println(reproduction);
+		try {
+   			Thread.sleep(5*1000);
+		}
+		catch (Exception e) {
+   			System.out.println(e);
+		}
+		return reproduction;
 	}
 
 }

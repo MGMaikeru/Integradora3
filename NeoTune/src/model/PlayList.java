@@ -111,8 +111,7 @@ public class PlayList{
 		}else if(playListType == PlayListType.MIXED){
 			for (int i = ROWS-1; i>-1; i--) {
 				for (int j = COLUMNS-1; j>-1; j--) {
-					if ((((i+j)%2)!=0) && (((i+j)%2)>1))
-					{
+					if ((((i+j)%2)!=0) /*&& (((i+j)%2)>1)*/){
 				 		id += this.idMatrix[i][j];
 					}
 				}
@@ -122,19 +121,25 @@ public class PlayList{
 		return id;
 	}
 
-	public void addAudio(Archive newAudio){
+	public String addAudio(Archive newAudio){
 		String msj = "";
 		if (this.playListType == PlayListType.AUDIO) {
+			 msj = "This playlist only acepts songs";
 			if (newAudio instanceof Song) {
-				audios.add(audioPos);
+				 msj = "Song successful added";
+				audios.add(newAudio);
 			}
 		}else if (this.playListType == PlayListType.PODSCAST) {
-			if (newAudio instanceof Podscast) {
-				audios.add(audioPos);
+			msj = "This playlist only acepts podcasts";
+			if (newAudio instanceof PodScast) {
+				msj = "Podcast successful added";
+				audios.add(newAudio);
 			}
 		}else if (this.playListType == PlayListType.MIXED){
-			audios.add(audioPos);
+			msj = "Audio successful added";
+			audios.add(newAudio);
 		}
+		return msj;
 	}
 
 	public void eliminateAudio(int audioPos){

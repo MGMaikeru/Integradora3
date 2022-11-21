@@ -3,7 +3,7 @@ package model;
 public abstract class Archive{
 	protected String name;
 	private String imageUrl;
-	protected double duration; 
+	protected double duration;
 	
 	public Archive(String name, String imageUrl, double duration){
 		this.name = name;
@@ -14,7 +14,11 @@ public abstract class Archive{
 	public String getName(){
 		return this.name;
 	}
+	public abstract int getReproductions();
 
 	public abstract String toString();
 
+	public abstract void addReproduction();
+
+	
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.time.*;
 
 public abstract class User{
-	private String nickName;
+	protected String nickName;
 	private String id;
 	private LocalDate registerDate;
 

@@ -53,7 +53,7 @@ public class Main{
 		return 
 			"\n" +
 			"<< --------------------------------------------------------------------- >>\n" +
-			"<< -                                Welcome                            - >>\n" +
+			"<< -                         Welcome To NeoTube                        - >>\n" +
 			"<< --------------------------------------------------------------------- >>\n" +
 			"1. Register consumer user \n" +
 			"2. Register producer user \n" + 
@@ -61,10 +61,24 @@ public class Main{
 			"4. Create playlist \n" +
 			"5. Configure playlist \n" +
 			"6. Share playList\n" +
-			//"7. Consult status of a specific apartment \n" +
-			//"8. Mostrar quantity of leased apartments of a specific owner \n" +
-			//"9. Calculate and show monthly value of owner apartments \n" +
+			"7. Reproduce Audio \n" +
+			"8. Buy song \n" +
+			"9. Show report \n" +
 			"0. Exit.\n"; 
+	}
+
+	public String printReportMenu(){
+		return 
+			"\n" +
+			"<< --------------------------------------------------------------------- >>\n" +
+			"<< -                                 Report                            - >>\n" +
+			"<< --------------------------------------------------------------------- >>\n" +
+			"1. Show total reproduction in app \n" +
+			"2. Show most played song genre of specific user and app \n" + 
+			"3. Show most played podscat category of specific user and app \n" +
+			"4. Show top of songs and podcats \n" +
+			"5. Show sales \n" +
+			"0. Back.\n"; 
 	}
 
 	public void consumerUserRegister(){
@@ -301,6 +315,116 @@ public class Main{
 		System.out.println(msj);
 	}
 
+	public void playAudio(){
+		String msj = "The number id isn't regitered.";
+		System.out.println(controller.printConsumerUsers());
+		System.out.println("Type identification number of the consumer user:");
+		String numberId = reader.next();
+		int userPos = controller.searchUserById(numberId);
+		if (userPos != -1){
+			msj = "This song don't exist.";
+			System.out.println(controller.printSong());
+			System.out.println(controller.printPodcasts());
+			System.out.println("Type song name to play:");
+			String songName = reader.next();
+			int songPos = controller.searchArchiveByName(songName);
+			if (songPos != -1) {
+				controller.reproduceAudio(userPos, songPos);
+				msj = "End of audio...";
+			}
+		}
+		System.out.println(msj);
+	}
+
+	public void buySong(){
+		String msj = "The number id isn't regitered.";
+		System.out.println(controller.printConsumerUsers());
+		System.out.println("Type identification number of the consumer user:");
+		String numberId = reader.next();
+		int userPos = controller.searchUserById(numberId);
+		if (userPos != -1){
+			msj = "This song don't exist.";
+			System.out.println(controller.printSong());
+			System.out.println("Type song name to buy:");
+			String songName = reader.next();
+			int songPos = controller.searchArchiveByName(songName);
+			if (songPos != -1) {
+				msj = "Please type a valid song name.";				
+				int status = controller.verifyAudioInstance(songPos);
+				if (status == 1){
+					msj = controller.addSongToUser(userPos, songPos);
+				}
+			}
+			
+		}
+		System.out.println(msj);
+	}
+
+	public void showReport(){
+		int option = 1; 
+
+		while(option != 0){
+			System.out.println(printReportMenu());
+			option = validateIntegerOption();
+			switch(option){
+				case 1:
+					System.out.println(controller.getTotalReproductions());
+				break;
+
+				case 2:
+					String msj = "The number id isn't regitered.";
+					System.out.println(controller.printConsumerUsers());
+					System.out.println("Type identification number of the consumer user:");
+					String numberId = reader.next();
+					int userPos = controller.searchUserById(numberId);
+					if (userPos != -1){
+						msj = controller.getMostplayedGenre(userPos);
+					}
+					System.out.println(msj);
+				break;
+
+				case 3:
+					msj = "The number id isn't regitered.";
+					System.out.println(controller.printConsumerUsers());
+					System.out.println("Type identification number of the consumer user:");
+					numberId = reader.next();
+					userPos = controller.searchUserById(numberId);
+					if (userPos != -1){
+						msj = controller.getMostplayedCategory(userPos);
+					}
+					System.out.println(msj);
+				break;
+
+				case 4:
+					String topSongs = controller.getOrderedSongsReproductions();
+					System.out.println(topSongs);
+					String topPodcasts = controller.getOrderedPodcastsReproductions();
+					System.out.println(topPodcasts);
+				break;
+
+				case 5:
+					System.out.println(controller.getSongsSolds()); 
+				break;
+
+				case 6:
+				break;
+
+				case 7:
+				break;
+
+				case 0:
+					System.out.println("Back");
+				break;
+
+				default:
+					System.out.println("Invalid Option");
+				break;
+
+			}
+		}
+		
+	}
+
 	public int getIntegerData(){
 		String msj = "Invalid character. Type another.";
 		int data = -1;
@@ -342,15 +466,15 @@ public class Main{
 					break;
 
 				case 7: 
-					
+					playAudio();
 					break;
 
-				case 8: 
-					
+				case 8:
+					buySong();
 					break;
 
 				case 9: 
-					
+					showReport();
 					break;
 
 				case 0: 
